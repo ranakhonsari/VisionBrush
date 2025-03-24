@@ -21,23 +21,25 @@ class InpaintingPipeline:
 
         # Step 4: Load the inpainting pipeline
         controlnet = ControlNetModel.from_pretrained(
-            "lllyasviel/control_v11p_sd15_inpaint", torch_dtype=torch.float16, use_safetensors=True
+            "lllyasviel/control_v11p_sd15_inpaint", torch_dtype=torch.float32, use_safetensors=True
         )
         pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=controlnet, torch_dtype=torch.float16, use_safetensors=True
+            "runwayml/stable-diffusion-v1-5", controlnet=controlnet, torch_dtype=torch.float32, use_safetensors=True
         )
         pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
-        pipe.enable_model_cpu_offload()
+        #pipe.enable_model_cpu_offload()
+        pipe.to("cpu")
 
-        # Step 5: Perform inpainting
-        output = pipe(
-            final_text_prompt,  # Text prompt for inpainting
-            num_inference_steps=20,
-            eta=1.0,
-            image=init_image,
-            mask_image=mask_image,
-            control_image=control_image,
-        ).images[0]
+        with torch.no_grad():
+            # Step 5: Perform inpainting
+            output = pipe(
+                final_text_prompt,  # Text prompt for inpainting
+                num_inference_steps=20,
+                eta=1.0,
+                image=init_image,
+                mask_image=mask_image,
+                control_image=control_image,
+            ).images[0]
 
         # Step 6: Save and visualize results
         if save_results:
@@ -52,7 +54,7 @@ class InpaintingPipeline:
             output.save("inpainted_image.png")
 
             # Visualize the results
-            self.visualize_results(init_image, mask_image, output)
+            #self.visualize_results(init_image, mask_image, output)
 
 
 # Example usage
