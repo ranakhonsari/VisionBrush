@@ -33,7 +33,7 @@ async def process_image(
     inpainting_pipeline.inpainting(image_path, mask_text_prompt, final_text_prompt, save_results=True)
 
     # Return the processed image
-    output_path = "inpainted_image.png"
+    output_path = "test_images/inpainted_image.png"
     return FileResponse(output_path, media_type="image/png", filename="inpainted_image.png")
 
 if __name__ == "__main__":

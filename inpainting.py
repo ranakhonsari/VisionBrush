@@ -49,9 +49,9 @@ class InpaintingPipeline:
             print(f"output type: {type(output)}, mode: {output.mode}")
 
             # Save the images
-            init_image.save("original_image.png")
-            mask_image.save("masked_image.png")
-            output.save("inpainted_image.png")
+            init_image.save("test_images/original_image.png")
+            mask_image.save("test_images/masked_image.png")
+            output.save("test_images/inpainted_image.png")
 
             # Visualize the results
             #self.visualize_results(init_image, mask_image, output)
