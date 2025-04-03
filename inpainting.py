@@ -3,12 +3,17 @@ import torch
 from diffusers import StableDiffusionControlNetInpaintPipeline, ControlNetModel, UniPCMultistepScheduler
 import matplotlib.pyplot as plt
 from masks import MaskGenerator
+import wandb
 
 class InpaintingPipeline:
     def __init__(self):
         self.mask_generator = MaskGenerator()
 
+
     def inpainting(self, image_path, mask_text_prompt, final_text_prompt, save_results=True):
+
+        run = wandb.init(project="visionbrush-inpainting")
+
         """Run the inpainting pipeline."""
         # Step 1: Generate masks
         masks, image_pil = self.mask_generator.segmentation_model(image_path, mask_text_prompt)
@@ -40,6 +45,18 @@ class InpaintingPipeline:
                 mask_image=mask_image,
                 control_image=control_image,
             ).images[0]
+        # Define W&B Table to store generations
+        columns = ["mask_text_prompt", "final_text_prompt"]
+        table = wandb.Table(columns=columns)
+        table.add_data(mask_text_prompt, final_text_prompt)
+                # Log text separately in a table
+        run.log({"prompts": table})
+        # Log images in W&B
+        run.log({
+            "Original Image": wandb.Image(image_pil),
+            "Masked Image": wandb.Image(mask_image),
+            "Inpainted Image": wandb.Image(output)
+        })
 
         # Step 6: Save and visualize results
         if save_results:
