@@ -1,6 +1,6 @@
 diffusers==0.32.2
 fastapi==0.115.12
-lang_sam==0.2.1
+lang_sam
 matplotlib==3.10.1
 numpy==2.2.4
 Pillow==11.1.0
