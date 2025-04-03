@@ -15,11 +15,6 @@ jobs:
         with:
           python-version: "3.11.11"
 
-      - name: Install dependencies (with CPU PyTorch for GitHub Actions)
+      - name: Install dependencies (CPU version of PyTorch)
         run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-            pip install -r requirements.txt --no-deps
-          else
-            pip install -r requirements.txt
-          fi
+          pip install -r requirements.txt
