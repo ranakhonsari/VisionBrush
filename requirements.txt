@@ -8,5 +8,4 @@ numpy==2.2.4
 Pillow==11.1.0
 Requests==2.32.3
 streamlit==1.27.2
-torch==2.4.1+cu124
 uvicorn==0.34.0
