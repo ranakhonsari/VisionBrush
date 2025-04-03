@@ -1,6 +1,9 @@
 diffusers==0.32.2
 fastapi==0.115.12
-lang_sam
+torch==2.4.1+cu124
+torchvision==0.19.1+cu124
+-f https://download.pytorch.org/whl/cu124
+git+https://github.com/luca-medeiros/lang-segment-anything.git
 matplotlib==3.10.1
 numpy==2.2.4
 Pillow==11.1.0
